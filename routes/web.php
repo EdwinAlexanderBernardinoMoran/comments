@@ -13,13 +13,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', 'dashboard', 301);
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $comments = \App\Models\Comment::orderBy('id', 'DESC')->paginate();
+    return view('dashboard', ['comments' => $comments]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

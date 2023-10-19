@@ -42,4 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Un usuario puede tener muchos comentarios
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
+    // Un usuario puede tener muchas repuestas
+    public function replies(){
+        return $this->hasMany(Reply::class);
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReplyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +15,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::redirect('/', 'dashboard', 301);
+Route::redirect('/', 'dashboard');
 
 Route::get('/dashboard', function () {
     $comments = \App\Models\Comment::orderBy('id', 'DESC')->paginate();
     return view('dashboard', ['comments' => $comments]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Route comments
+Route::post('comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+
+// Route reply
+Route::post('replies/{comment}', [ReplyController::class, 'store'])->name('replies.store')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

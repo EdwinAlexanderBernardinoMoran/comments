@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', 'dashboard');
 
 Route::get('/dashboard', function () {
-    $comments = \App\Models\Comment::orderBy('id', 'DESC')->paginate();
+    // Que me traiga los usuarios de ese comentario y sus respuestas y que cada respuesta traiga a su usuario.
+    $comments = \App\Models\Comment::with('user', 'replies.user')
+    ->orderBy('id', 'DESC')
+    ->paginate();
     return view('dashboard', ['comments' => $comments]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
